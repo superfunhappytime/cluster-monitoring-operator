@@ -632,11 +632,13 @@ spec:
       record: kube_pod_status_ready:image_registry:sum
     - alert: sre-uptime-sla-warn
       annotations:
-        message: The API server has reported 100% request failures for the last 5 minutes.
-      expr: (sum(rate(apiserver_request_count{job="apiserver", code=~"(400|5..)"}[5m])) / sum(rate(apiserver_request_count{job="apiserver"}[5m])) >= 1)
+        message: The API server has reported 100% request failures for the last 5
+          minutes.
+      expr: (sum(rate(apiserver_request_count{job="apiserver", code=~"(400|5..)"}[5m]))
+        / sum(rate(apiserver_request_count{job="apiserver"}[5m])) >= 1)
       for: 5m
       labels:
-        severity: warning
+        severity: warn
   - name: kube-state-metrics
     rules:
     - alert: KubeStateMetricsListErrors
