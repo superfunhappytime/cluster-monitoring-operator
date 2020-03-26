@@ -301,6 +301,17 @@ local droppedKsmLabels = 'endpoint, instance, job, pod, service';
             expr: 'sum(kube_pod_status_ready{condition="true",namespace="openshift-image-registry",pod=~"image-registry.*"}) by(condition)',
             record: 'kube_pod_status_ready:image_registry:sum',
           },
+          {
+            expr: '(sum(rate(apiserver_request_count{job="apiserver", code=~"(400|5..)"}[5m])) / sum(rate(apiserver_request_count{job="apiserver"}[5m])) >= 1)',
+            alert: 'sre-uptime-sla-warn',
+            'for': '5m',
+            annotations: {
+              message: 'The API server has reported 100% request failures for the last 5 minutes.',
+            },
+            labels: {
+              severity: 'warn',
+            },
+          },
         ],
       },
     ],
